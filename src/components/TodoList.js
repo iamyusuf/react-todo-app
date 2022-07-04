@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import styled from "styled-components";
 
 const TodoItem = styled.div`
-	border-bottom: 1px solid black;
+	border-bottom: 1px dashed black;
 	font-size: 1.6em;
   text-decoration: ${props => props.done ? 'line-through' : ''};
   color: ${props => props.done ? '#9e9e9e' : '#000'};
