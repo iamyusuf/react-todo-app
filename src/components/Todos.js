@@ -1,4 +1,3 @@
-import styled from "styled-components";
 import TodoList from "./TodoList";
 import TodoCard from "./todos/TodoCard";
 import AddTodoButton from "./todos/AddTodoButton";
@@ -9,7 +8,7 @@ import { nanoid } from "nanoid";
 import { useEffect, useMemo, useReducer, useRef, useState } from "react";
 import { pluralize } from "../lib/helpers";
 import { TODO_ACTIONS } from "./todosConstant";
-import { todosReducer } from "./todosService";
+import { todosReducer, todoFactory } from "./todosService";
 
 const defaultTodos = [{
 	id: nanoid(),
@@ -48,12 +47,7 @@ export default function Todos() {
 			return;
 		}
 		
-		const todo = {
-			id: nanoid(),
-			task: todoText,
-			done: false
-		}
-		
+		const todo = todoFactory({ task: todoText });
 		dispatch({type: TODO_ACTIONS.ADD_NEW_TODO, todo})
 		setTodoText('')
 	}
