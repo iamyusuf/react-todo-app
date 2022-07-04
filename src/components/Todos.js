@@ -3,6 +3,7 @@ import TodoList from "./TodoList";
 import { nanoid } from "nanoid";
 import { useMemo, useReducer, useState } from "react";
 import { pluralize } from "../lib/helpers";
+import { todosReducer } from "./todosService";
 
 const TodoCard = styled.div`
   display: flex;
@@ -44,47 +45,9 @@ const TODO_ACTIONS = {
 	UPDATE_TODO: 'UPDATE_TODO'
 }
 
-function reducer(todos, action) {
-	switch(action.type) {
-		case TODO_ACTIONS.ADD_NEW_TODO:
-			return [...todos, action.todo]
-		
-		case TODO_ACTIONS.MARK_AS_DONE:
-			return todos.map((todo, index) => {
-				if(index === action.index) {
-					return {
-						...todo,
-						done: !todo.done
-					}
-				}
-				return todo;
-			})
-		
-		case TODO_ACTIONS.DELETE_TODO:
-			return todos.filter(todo => todo.id !== action.id)
-		
-		case TODO_ACTIONS.UPDATE_TODO:
-			const {task, id} = action.todo;
-			
-			return todos.map(todo => {
-				if(todo.id === id) {
-					return {
-						...todo,
-						task
-					}
-				}
-				
-				return todo;
-			});
-		
-		default:
-			return todos;
-	}
-}
-
 export default function Todos() {
 	
-	const [todos, dispatch] = useReducer(reducer, defaultTodos);
+	const [todos, dispatch] = useReducer(todosReducer, defaultTodos);
 	const [todoText, setTodoText] = useState('');
 	const [editId, setEditId] = useState(null);
 	
