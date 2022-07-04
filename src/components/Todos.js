@@ -87,7 +87,7 @@ export default function Todos() {
 		setTodoText('')
 	}
 	
-	const placeholder = `${dueTodosCount} un-finished ${pluralize(dueTodosCount, 'task', 'tasks')}...`
+	const placeholder = dueTodosCount === 0 ? 'All tasks are done!' : `${dueTodosCount} un-finished ${pluralize(dueTodosCount, 'task', 'tasks')}...`
 	
 	return <TodoCard>
 		<TodoCardHeading>
