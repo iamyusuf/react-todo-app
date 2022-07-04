@@ -1,31 +1,15 @@
 import styled from "styled-components";
 import TodoList from "./TodoList";
+import TodoCard from "./todos/TodoCard";
 import AddTodoButton from "./todos/AddTodoButton";
+import TodoCardHeading from "./todos/TodoCardHeading";
+import TodoForm from "./todos/TodoForm";
+import TodoTaskInput from "./todos/TodoTaskInput";
 import { nanoid } from "nanoid";
 import { useEffect, useMemo, useReducer, useRef, useState } from "react";
 import { pluralize } from "../lib/helpers";
 import { TODO_ACTIONS } from "./todosConstant";
 import { todosReducer } from "./todosService";
-
-const TodoCard = styled.div`
-  display: flex;
-  flex-direction: column;
-  text-align: center;
-`
-
-const TodoCardHeading = styled.div`
-  background-color: #af2f2f;
-  color: white;
-  margin-bottom: 1em;
-`;
-
-const TodoForm = styled.div`
-  margin-bottom: 1em;
-`
-
-const TodoTaskInput = styled.input`
-  font-size: 2em;
-`
 
 const defaultTodos = [{
 	id: nanoid(),
