@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import TodoList from "./TodoList";
 import { nanoid } from "nanoid";
-import { useReducer, useState } from "react";
+import { useMemo, useReducer, useState } from "react";
 import { pluralize } from "../lib/helpers";
 
 const TodoCard = styled.div`
@@ -67,7 +67,10 @@ export default function Todos() {
 	const [todos, dispatch] = useReducer(reducer, defaultTodos);
 	const [todoText, setTodoText] = useState('');
 	
-	const unDoneTasks = todos.filter(todo => !todo.done).length;
+	const unDoneTasks = useMemo(
+		() => todos.filter(todo => !todo.done).length,
+		[todos]
+	);
 	
 	const handleClickAddTodo = () => {
 		if(!todoText) {
