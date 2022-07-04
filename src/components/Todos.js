@@ -2,6 +2,7 @@ import styled from "styled-components";
 import TodoList from "./TodoList";
 import { nanoid } from "nanoid";
 import { useReducer, useState } from "react";
+import { pluralize } from "../lib/helpers";
 
 const TodoCard = styled.div`
 	display: flex;
@@ -55,6 +56,8 @@ export default function Todos() {
 	const [todos, dispatch] = useReducer(reducer, defaultTodos);
 	const [todoText, setTodoText] = useState('');
 	
+	const unDoneTasks = todos.filter(todo => !todo.done).length;
+	
 	const handleClickAddTodo = () => {
 		if (!todoText) {
 			return
@@ -70,6 +73,8 @@ export default function Todos() {
 		setTodoText('')
 	}
 	
+	const placeholder = `${unDoneTasks} un-finished ${pluralize(unDoneTasks, 'task', 'tasks')}...`
+	
 	return <TodoCard>
 		<TodoCardHeading>
 			<h1>Todos</h1>
@@ -78,7 +83,7 @@ export default function Todos() {
 		<TodoForm>
 			
 			<TodoForm>
-				<TodoTaskInput value={todoText} onChange={e => setTodoText(e.target.value)} type="text"/>
+				<TodoTaskInput placeholder={`${placeholder}`} value={todoText} onChange={e => setTodoText(e.target.value)} type="text"/>
 			</TodoForm>
 			
 			<AddTodoButton onClick={handleClickAddTodo}>
