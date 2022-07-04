@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import TodoList from "./TodoList";
 import { nanoid } from "nanoid";
-import { useState } from "react";
+import { useReducer, useState } from "react";
 
 const TodoCard = styled.div`
 	display: flex;
@@ -24,27 +24,67 @@ const TodoButtonArea = styled.div`
 	margin-bottom: 1em;
 `
 
+const TodoForm = styled.div`
+  margin-bottom: 1em;
+`
+
+const TodoTaskInput = styled.input`
+	font-size: 2em;
+`
+
 const defaultTodos = [{
 	id: nanoid(),
 	task: "Pay the bill",
 	done: false
 }]
 
+function reducer(state, action) {
+	switch(action.type) {
+		case 'ADD_NEW_TODO':
+			return [...state, action.todo]
+			
+		case 'UPDATE_TODO':
+			// const index = action.payload.index;
+			// const todo = action.payload.todo;
+			return state
+	}
+}
 
 export default function Todos() {
 	
-	const [todos, setTodos] = useState(defaultTodos);
+	const [todos, dispatch] = useReducer(reducer, defaultTodos);
+	const [todoText, setTodoText] = useState('');
+	
+	const handleClickAddTodo = () => {
+		if (!todoText) {
+			return
+		}
+		
+		const todo = {
+			id: nanoid(),
+			task: todoText,
+			done: false
+		}
+		
+		dispatch({ type: 'ADD_NEW_TODO', todo })
+		setTodoText('')
+	}
 	
 	return <TodoCard>
 		<TodoCardHeading>
 			<h1>Todos</h1>
 		</TodoCardHeading>
 		
-		<TodoButtonArea>
-			<AddTodoButton>
+		<TodoForm>
+			
+			<TodoForm>
+				<TodoTaskInput value={todoText} onChange={e => setTodoText(e.target.value)} type="text"/>
+			</TodoForm>
+			
+			<AddTodoButton onClick={handleClickAddTodo}>
 				Add New Todo
 			</AddTodoButton>
-		</TodoButtonArea>
+		</TodoForm>
 		
 		<TodoList todos={todos} />
 	</TodoCard>
