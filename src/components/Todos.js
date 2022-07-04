@@ -67,7 +67,7 @@ export default function Todos() {
 	const [todos, dispatch] = useReducer(reducer, defaultTodos);
 	const [todoText, setTodoText] = useState('');
 	
-	const unDoneTasks = useMemo(
+	const dueTodosCount = useMemo(
 		() => todos.filter(todo => !todo.done).length,
 		[todos]
 	);
@@ -87,7 +87,7 @@ export default function Todos() {
 		setTodoText('')
 	}
 	
-	const placeholder = `${unDoneTasks} un-finished ${pluralize(unDoneTasks, 'task', 'tasks')}...`
+	const placeholder = `${dueTodosCount} un-finished ${pluralize(dueTodosCount, 'task', 'tasks')}...`
 	
 	return <TodoCard>
 		<TodoCardHeading>
