@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import TodoList from "./TodoList";
+import AddTodoButton from "./todos/AddTodoButton";
 import { nanoid } from "nanoid";
 import { useEffect, useMemo, useReducer, useRef, useState } from "react";
 import { pluralize } from "../lib/helpers";
@@ -16,13 +17,6 @@ const TodoCardHeading = styled.div`
   background-color: #af2f2f;
   color: white;
   margin-bottom: 1em;
-`;
-
-const AddTodoButton = styled.button`
-  background-color: #af2f2f;
-  font-size: 1.5em;
-  width: 20%;
-  cursor: pointer;
 `;
 
 const TodoForm = styled.div`
