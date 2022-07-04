@@ -59,9 +59,18 @@ function reducer(state, action) {
 			return state.filter(todo => todo.id !== action.id)
 		
 		case 'UPDATE_TODO':
-			// const index = action.payload.index;
-			// const todo = action.payload.todo;
-			return state
+			const { task, id } = action.todo;
+			
+			return state.map(todo => {
+				if (todo.id === id) {
+					return {
+						...todo,
+						task
+					}
+				}
+				
+				return todo;
+			});
 	}
 }
 
@@ -69,6 +78,7 @@ export default function Todos() {
 	
 	const [todos, dispatch] = useReducer(reducer, defaultTodos);
 	const [todoText, setTodoText] = useState('');
+	const [editId, setEditId] = useState(null);
 	
 	const dueTodosCount = useMemo(
 		() => todos.filter(todo => !todo.done).length,
@@ -78,6 +88,20 @@ export default function Todos() {
 	const handleClickAddTodo = () => {
 		if(!todoText) {
 			return
+		}
+		
+		
+		if(!!editId) {
+			dispatch({
+				type: 'UPDATE_TODO', todo: {
+					task: todoText,
+					id: editId
+				}
+			})
+			
+			setEditId(null);
+			setTodoText('')
+			return;
 		}
 		
 		const todo = {
@@ -98,17 +122,25 @@ export default function Todos() {
 		</TodoCardHeading>
 		
 		<TodoForm>
-			
 			<TodoForm>
 				<TodoTaskInput placeholder={`${placeholder}`} value={todoText} onChange={e => setTodoText(e.target.value)} type="text"/>
 			</TodoForm>
 			
 			<AddTodoButton onClick={handleClickAddTodo}>
-				Add New Todo
+				{editId ? "Update todo" : "Add New Todo"}
 			</AddTodoButton>
 		</TodoForm>
 		
-		<TodoList handleDelete={id => dispatch({type: 'DELETE_TODO', id})} handleDone={index => dispatch({type: 'MARK_AS_DONE', index})} todos={todos}/>
+		<TodoList
+			handleEdit={id => {
+				setEditId(id);
+				const todoText = todos.find(todo => todo.id === id)?.task;
+				setTodoText(todoText);
+			}}
+			handleDelete={id => dispatch({type: 'DELETE_TODO', id})}
+			handleDone={index => dispatch({type: 'MARK_AS_DONE', index})}
+			todos={todos}
+		/>
 	</TodoCard>
 }
 
