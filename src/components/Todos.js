@@ -55,6 +55,9 @@ function reducer(state, action) {
 				return todo;
 			})
 		
+		case 'DELETE_TODO':
+			return state.filter(todo => todo.id !== action.id)
+		
 		case 'UPDATE_TODO':
 			// const index = action.payload.index;
 			// const todo = action.payload.todo;
@@ -105,7 +108,7 @@ export default function Todos() {
 			</AddTodoButton>
 		</TodoForm>
 		
-		<TodoList handleDone={index => dispatch({type: 'MARK_AS_DONE', index})} todos={todos}/>
+		<TodoList handleDelete={id => dispatch({type: 'DELETE_TODO', id})} handleDone={index => dispatch({type: 'MARK_AS_DONE', index})} todos={todos}/>
 	</TodoCard>
 }
 

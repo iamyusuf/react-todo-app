@@ -9,7 +9,15 @@ const TodoItem = styled.div`
 	padding: 1em;
 `
 
-export default function TodoList({ todos, handleDone }) {
+const TodoTask = styled.span`
+	padding-right: 1em;
+`
+
+const TodoActions = styled.span`
+
+`
+
+export default function TodoList({ todos, handleDone, handleDelete }) {
 	if (!todos.length) {
 		return <h1>You don't have any todos left!</h1>
 	}
@@ -19,7 +27,15 @@ export default function TodoList({ todos, handleDone }) {
 			{
 				todos.map((todo, index) => (
 					<TodoItem done={todo.done} key={todo.id}>
-						{todo.task} <button onClick={() => handleDone(index)}>{todo.done ? 'Undone' : 'Done'}</button> {" "} <button>Edit</button>
+						<TodoTask>
+							{todo.task}
+						</TodoTask>
+						
+						<TodoActions>
+							<button onClick={() => handleDone(index)}>{todo.done ? 'Undone' : 'Done'}</button> {" "}
+							<button>Edit</button> {" "}
+							<button onClick={() => handleDelete(todo.id)}>Delete</button>
+						</TodoActions>
 					</TodoItem>
 				))
 			}
@@ -29,5 +45,6 @@ export default function TodoList({ todos, handleDone }) {
 
 TodoList.propTypes = {
 	todos: PropTypes.array.isRequired,
-	handleDone: PropTypes.func.isRequired
+	handleDone: PropTypes.func.isRequired,
+	handleDelete: PropTypes.func.isRequired
 };
