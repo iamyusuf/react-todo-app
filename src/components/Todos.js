@@ -20,6 +20,7 @@ const AddTodoButton = styled.button`
   background-color: rgba(29, 194, 35, 0.73);
   font-size: 1.5em;
   width: 20%;
+  cursor: pointer;
 `
 
 const TodoForm = styled.div`
