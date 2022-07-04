@@ -44,13 +44,13 @@ const TODO_ACTIONS = {
 	UPDATE_TODO: 'UPDATE_TODO'
 }
 
-function reducer(state, action) {
+function reducer(todos, action) {
 	switch(action.type) {
 		case TODO_ACTIONS.ADD_NEW_TODO:
-			return [...state, action.todo]
+			return [...todos, action.todo]
 		
 		case TODO_ACTIONS.MARK_AS_DONE:
-			return state.map((todo, index) => {
+			return todos.map((todo, index) => {
 				if(index === action.index) {
 					return {
 						...todo,
@@ -61,12 +61,12 @@ function reducer(state, action) {
 			})
 		
 		case TODO_ACTIONS.DELETE_TODO:
-			return state.filter(todo => todo.id !== action.id)
+			return todos.filter(todo => todo.id !== action.id)
 		
 		case TODO_ACTIONS.UPDATE_TODO:
 			const {task, id} = action.todo;
 			
-			return state.map(todo => {
+			return todos.map(todo => {
 				if(todo.id === id) {
 					return {
 						...todo,
@@ -78,7 +78,7 @@ function reducer(state, action) {
 			});
 		
 		default:
-			return state;
+			return todos;
 	}
 }
 
