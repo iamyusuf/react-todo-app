@@ -22,10 +22,6 @@ const AddTodoButton = styled.button`
   width: 20%;
 `
 
-const TodoButtonArea = styled.div`
-  margin-bottom: 1em;
-`
-
 const TodoForm = styled.div`
   margin-bottom: 1em;
 `
@@ -40,12 +36,19 @@ const defaultTodos = [{
 	done: false
 }]
 
+const TODO_ACTIONS = {
+	ADD_NEW_TODO: 'ADD_NEW_TODO',
+	MARK_AS_DONE: 'MARK_AS_DONE',
+	DELETE_TODO: 'DELETE_TODO',
+	UPDATE_TODO: 'UPDATE_TODO'
+}
+
 function reducer(state, action) {
 	switch(action.type) {
-		case 'ADD_NEW_TODO':
+		case TODO_ACTIONS.ADD_NEW_TODO:
 			return [...state, action.todo]
 		
-		case 'MARK_AS_DONE':
+		case TODO_ACTIONS.MARK_AS_DONE:
 			return state.map((todo, index) => {
 				if(index === action.index) {
 					return {
@@ -56,14 +59,14 @@ function reducer(state, action) {
 				return todo;
 			})
 		
-		case 'DELETE_TODO':
+		case TODO_ACTIONS.DELETE_TODO:
 			return state.filter(todo => todo.id !== action.id)
 		
-		case 'UPDATE_TODO':
-			const { task, id } = action.todo;
+		case TODO_ACTIONS.UPDATE_TODO:
+			const {task, id} = action.todo;
 			
 			return state.map(todo => {
-				if (todo.id === id) {
+				if(todo.id === id) {
 					return {
 						...todo,
 						task
@@ -72,6 +75,9 @@ function reducer(state, action) {
 				
 				return todo;
 			});
+		
+		default:
+			return state;
 	}
 }
 
@@ -94,7 +100,7 @@ export default function Todos() {
 		
 		if(!!editId) {
 			dispatch({
-				type: 'UPDATE_TODO', todo: {
+				type: TODO_ACTIONS.UPDATE_TODO, todo: {
 					task: todoText,
 					id: editId
 				}
@@ -111,7 +117,7 @@ export default function Todos() {
 			done: false
 		}
 		
-		dispatch({type: 'ADD_NEW_TODO', todo})
+		dispatch({type: TODO_ACTIONS.ADD_NEW_TODO, todo})
 		setTodoText('')
 	}
 	
@@ -138,8 +144,8 @@ export default function Todos() {
 				const todoText = todos.find(todo => todo.id === id)?.task;
 				setTodoText(todoText);
 			}}
-			handleDelete={id => dispatch({type: 'DELETE_TODO', id})}
-			handleDone={index => dispatch({type: 'MARK_AS_DONE', index})}
+			handleDelete={id => dispatch({type: TODO_ACTIONS.DELETE_TODO, id})}
+			handleDone={index => dispatch({type: TODO_ACTIONS.MARK_AS_DONE, index})}
 			todos={todos}
 		/>
 	</TodoCard>
