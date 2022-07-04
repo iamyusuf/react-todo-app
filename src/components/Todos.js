@@ -5,24 +5,24 @@ import { useReducer, useState } from "react";
 import { pluralize } from "../lib/helpers";
 
 const TodoCard = styled.div`
-	display: flex;
-	flex-direction: column;
+  display: flex;
+  flex-direction: column;
   text-align: center;
 `
 
 const TodoCardHeading = styled.div`
   background-color: rgba(29, 194, 35, 0.73);
-	color: white;
+  color: white;
   margin-bottom: 1em;
 `
 
 const AddTodoButton = styled.button`
-	font-size: 1.5em;
-	width: 20%;
+  font-size: 1.5em;
+  width: 20%;
 `
 
 const TodoButtonArea = styled.div`
-	margin-bottom: 1em;
+  margin-bottom: 1em;
 `
 
 const TodoForm = styled.div`
@@ -30,7 +30,7 @@ const TodoForm = styled.div`
 `
 
 const TodoTaskInput = styled.input`
-	font-size: 2em;
+  font-size: 2em;
 `
 
 const defaultTodos = [{
@@ -43,7 +43,18 @@ function reducer(state, action) {
 	switch(action.type) {
 		case 'ADD_NEW_TODO':
 			return [...state, action.todo]
-			
+		
+		case 'MARK_AS_DONE':
+			return state.map((todo, index) => {
+				if(index === action.index) {
+					return {
+						...todo,
+						done: !todo.done
+					}
+				}
+				return todo;
+			})
+		
 		case 'UPDATE_TODO':
 			// const index = action.payload.index;
 			// const todo = action.payload.todo;
@@ -59,7 +70,7 @@ export default function Todos() {
 	const unDoneTasks = todos.filter(todo => !todo.done).length;
 	
 	const handleClickAddTodo = () => {
-		if (!todoText) {
+		if(!todoText) {
 			return
 		}
 		
@@ -69,7 +80,7 @@ export default function Todos() {
 			done: false
 		}
 		
-		dispatch({ type: 'ADD_NEW_TODO', todo })
+		dispatch({type: 'ADD_NEW_TODO', todo})
 		setTodoText('')
 	}
 	
@@ -91,7 +102,7 @@ export default function Todos() {
 			</AddTodoButton>
 		</TodoForm>
 		
-		<TodoList todos={todos} />
+		<TodoList handleDone={index => dispatch({type: 'MARK_AS_DONE', index})} todos={todos}/>
 	</TodoCard>
 }
 
