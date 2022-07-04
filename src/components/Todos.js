@@ -3,6 +3,7 @@ import TodoList from "./TodoList";
 import { nanoid } from "nanoid";
 import { useMemo, useReducer, useState } from "react";
 import { pluralize } from "../lib/helpers";
+import { TODO_ACTIONS } from "./todosConstant";
 import { todosReducer } from "./todosService";
 
 const TodoCard = styled.div`
@@ -37,13 +38,6 @@ const defaultTodos = [{
 	task: "Pay the bill",
 	done: false
 }]
-
-const TODO_ACTIONS = {
-	ADD_NEW_TODO: 'ADD_NEW_TODO',
-	MARK_AS_DONE: 'MARK_AS_DONE',
-	DELETE_TODO: 'DELETE_TODO',
-	UPDATE_TODO: 'UPDATE_TODO'
-}
 
 export default function Todos() {
 	
