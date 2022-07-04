@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import TodoList from "./TodoList";
 import { nanoid } from "nanoid";
-import { useMemo, useReducer, useState } from "react";
+import { useEffect, useMemo, useReducer, useRef, useState } from "react";
 import { pluralize } from "../lib/helpers";
 import { TODO_ACTIONS } from "./todosConstant";
 import { todosReducer } from "./todosService";
@@ -44,6 +44,7 @@ export default function Todos() {
 	const [todos, dispatch] = useReducer(todosReducer, defaultTodos);
 	const [todoText, setTodoText] = useState('');
 	const [editId, setEditId] = useState(null);
+  const todoInputRef = useRef();
 	
 	const dueTodosCount = useMemo(
 		() => todos.filter(todo => !todo.done).length,
@@ -78,34 +79,46 @@ export default function Todos() {
 		dispatch({type: TODO_ACTIONS.ADD_NEW_TODO, todo})
 		setTodoText('')
 	}
+
+  useEffect(() => {
+    const todoText = todos.find((todo) => todo.id === editId)?.task;
+    setTodoText(todoText ?? '');
+    todoInputRef.current.focus();
+  }, [editId, todos])
 	
 	const placeholder = dueTodosCount === 0 ? 'All tasks are done!' : `${dueTodosCount} un-finished ${pluralize(dueTodosCount, 'task', 'tasks')}...`
 	
-	return <TodoCard>
-		<TodoCardHeading>
-			<h1>Todos</h1>
-		</TodoCardHeading>
-		
-		<TodoForm>
-			<TodoForm>
-				<TodoTaskInput placeholder={`${placeholder}`} value={todoText} onChange={e => setTodoText(e.target.value)} type="text"/>
-			</TodoForm>
-			
-			<AddTodoButton onClick={handleClickAddTodo}>
-				{editId ? "Update todo" : "Add New Todo"}
-			</AddTodoButton>
-		</TodoForm>
-		
-		<TodoList
-			handleEdit={id => {
-				setEditId(id);
-				const todoText = todos.find(todo => todo.id === id)?.task;
-				setTodoText(todoText);
-			}}
-			handleDelete={id => dispatch({type: TODO_ACTIONS.DELETE_TODO, id})}
-			handleDone={index => dispatch({type: TODO_ACTIONS.MARK_AS_DONE, index})}
-			todos={todos}
-		/>
-	</TodoCard>
+	return (
+    <TodoCard>
+      <TodoCardHeading>
+        <h1>Todos</h1>
+      </TodoCardHeading>
+
+      <TodoForm>
+        <TodoForm>
+          <TodoTaskInput
+            ref={todoInputRef}
+            placeholder={placeholder}
+            value={todoText}
+            onChange={(e) => setTodoText(e.target.value)}
+            type="text"
+          />
+        </TodoForm>
+
+        <AddTodoButton onClick={handleClickAddTodo}>
+          {editId ? "Update todo" : "Add New Todo"}
+        </AddTodoButton>
+      </TodoForm>
+
+      <TodoList
+        handleEdit={setEditId}
+        handleDelete={(id) => dispatch({ type: TODO_ACTIONS.DELETE_TODO, id })}
+        handleDone={(index) =>
+          dispatch({ type: TODO_ACTIONS.MARK_AS_DONE, index })
+        }
+        todos={todos}
+      />
+    </TodoCard>
+  );
 }
 
