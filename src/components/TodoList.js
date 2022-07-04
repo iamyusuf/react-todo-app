@@ -4,13 +4,13 @@ import styled from "styled-components";
 const TodoItem = styled.div`
 	border-bottom: 1px dashed black;
 	font-size: 1.6em;
-  text-decoration: ${props => props.done ? 'line-through' : ''};
-  color: ${props => props.done ? '#9e9e9e' : '#000'};
 	padding: 1em;
 `
 
 const TodoTask = styled.span`
 	padding-right: 1em;
+  text-decoration: ${props => props.done ? 'line-through' : ''};
+  color: ${props => props.done ? '#9e9e9e' : '#000'};
 `
 
 const TodoActions = styled.span`
@@ -26,8 +26,8 @@ export default function TodoList({ todos, handleDone, handleDelete, handleEdit }
 		<div>
 			{
 				todos.map((todo, index) => (
-					<TodoItem done={todo.done} key={todo.id}>
-						<TodoTask>
+					<TodoItem key={todo.id}>
+						<TodoTask done={todo.done}>
 							{todo.task}
 						</TodoTask>
 						
