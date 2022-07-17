@@ -9,6 +9,7 @@ import { useEffect, useMemo, useReducer, useRef, useState } from "react";
 import { pluralize } from "../lib/helpers";
 import { TODO_ACTIONS } from "./todosConstant";
 import { todosReducer, todoFactory } from "./todosService";
+import { Link } from 'react-router-dom';
 
 const defaultTodos = [{
 	id: nanoid(),
@@ -63,7 +64,10 @@ export default function Todos() {
 	return (
     <TodoCard>
       <TodoCardHeading>
-        <h1>Todos</h1>
+        <h1>Todos</h1>{" "}
+        <div>
+          <Link to="archives">Archives</Link>
+        </div>
       </TodoCardHeading>
 
       <TodoForm>
